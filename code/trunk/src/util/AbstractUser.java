@@ -4,8 +4,8 @@ package util;
 /**
  * 
  * This class provides a skeletal implementation of the <code>User</code> interface, 
- * to minimize the effort required to implement this interface. <p>
- * To implement a user, the programmer should generally provide a constructor with argument <code>uid</code>, 
+ * to minimize the effort required to implement this interface. 
+ * <p>To implement a user, the programmer should generally provide a constructor with argument <code>uid</code>, 
  * as the recommendation in the <code>User</code> interface specification.
  * @author tanchang
  *
