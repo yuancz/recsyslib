@@ -32,9 +32,12 @@ public abstract class AbstractUser implements User {
 	 */	
 	@Override
 	public boolean equals(Object obj) {
-		User u = (User)obj;
-		if(u.getUid()==this.uid)return true;
-		return super.equals(obj);
+        if (obj == this)
+            return true;
+        if (!(obj instanceof User))
+            return false;
+        User user = (User)obj;
+        return user.getUid() == this.uid;
 	}
 
 	@Override
