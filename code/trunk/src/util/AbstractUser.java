@@ -12,23 +12,16 @@ package util;
  */
 public abstract class AbstractUser implements User {
 	
-	private int uid;
+	protected int uid;
 	
 	protected AbstractUser(int uid){
 		this.uid = uid;
-	}
-	
-	/**
-	 * Return the <code>uid</code> of this <code>User</code> object. 
-	 */	
-	public int getUid(){
-		return uid;
-	}
+	}	
 
 	/**
 	 * Compares the specified object with this <code>User</code> for equality. 
 	 * Returns true if and only if the specified object is also a <code>User</code> and has the same <code>uid</code> with this <code>User</code>.
-	 * Thus, two <code>User</code> objects are equal if and only if the <code>getUid</code> method returns the same int value for both.
+	 * Thus, two <code>User</code> objects are equal if and only if the <code>getUid</code> method returns the same integer value for both.
 	 */	
 	@Override
 	public boolean equals(Object obj) {
