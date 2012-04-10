@@ -12,5 +12,12 @@ public class SimpleUser extends AbstractUser implements User{
 	public SimpleUser(int uid){
 		super(uid);
 	}
+	
+	/**
+	 * Return the <code>uid</code> of this <code>User</code> object. 
+	 */	
+	public int getUid(){
+		return uid;
+	}
 
 }
