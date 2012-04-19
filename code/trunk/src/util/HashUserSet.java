@@ -109,13 +109,9 @@ public class HashUserSet extends AbstractUserSet implements UserSet, Set<User>, 
     }
     
     /**
-     * Adds the specified element to this set if it is not already present.
-     * More formally, adds the specified element <tt>e</tt> to this set if
-     * this set contains no element <tt>e2</tt> such that
-     * <tt>(e==null&nbsp;?&nbsp;e2==null&nbsp;:&nbsp;e.equals(e2))</tt>.
-     * If this set already contains the element, the call leaves the set
+     * Adds the specified element to this set if it is not null or already present.
+     * If this set already contains the element or the element is null, the call leaves the set
      * unchanged and returns <tt>false</tt>.
-     * The element should not be null. 
      *
      * @param e element to be added to this set
      * @return <tt>true</tt> if this set did not already contain the specified
@@ -126,6 +122,89 @@ public class HashUserSet extends AbstractUserSet implements UserSet, Set<User>, 
         return map.put(e.getUid(), e)==null;
     }
     
+    /**
+     * Removes the specified element from this set if it is present.
+	 * Returns <tt>true</tt> if
+     * this set contained the element (or equivalently, if this set
+     * changed as a result of the call).  (This set will not contain the
+     * element once the call returns.)
+     *
+     * @param o object to be removed from this set, if present
+     * @return <tt>true</tt> if the set contained the specified element
+     */
+    public boolean remove(Object o) {
+    	if(o instanceof User){
+    		return map.remove(((User) o).getUid()) == o;
+    	}
+        return false;
+    }
+    
+    /**
+     * Removes all of the elements from this set.
+     * The set will be empty after this call returns.
+     */
+    public void clear() {
+        map.clear();
+    }
+    
+    /**
+     * Returns a shallow copy of this <tt>HashUserSet</tt> instance: the elements
+     * themselves are not cloned.
+     *
+     * @return a shallow copy of this set
+     */
+    public Object clone() {
+        try {
+            HashUserSet newSet = (HashUserSet) super.clone();
+            newSet.map = (HashMap<Integer, User>) map.clone();
+            return newSet;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+        }
+    }
+    
+    /**
+     * Save the state of this <tt>HashUserSet</tt> instance to a stream (that is,
+     * serialize it).
+     *
+     * @serialData The size of the set (the number of elements it contains)
+     *             (int), followed by all of its elements (each an Object) in
+     *             no particular order.
+     */
+    private void writeObject(java.io.ObjectOutputStream s)
+        throws java.io.IOException {
+        // Write out any hidden serialization magic
+        s.defaultWriteObject();
+
+        // Write out size
+        s.writeInt(map.size());
+
+        // Write out all elements in the proper order.
+        for (User e : map.values())
+            s.writeObject(e);
+    }
+
+    /**
+     * Reconstitute the <tt>HashSet</tt> instance from a stream (that is,
+     * deserialize it).
+     */
+    private void readObject(java.io.ObjectInputStream s)
+        throws java.io.IOException, ClassNotFoundException {
+        // Read in any hidden serialization magic
+        s.defaultReadObject();
+
+        // Create backing HashMap with default initial capacity (16) and load factor (0.75)
+        map = new HashMap<Integer, User>();
+
+        // Read in size
+        int size = s.readInt();
+
+        // Read in all elements in the proper order.
+        for (int i=0; i<size; i++) {
+            User e = (User) s.readObject();
+            map.put(e.getUid(), e);
+        }
+    }
 
 	@Override
 	public User getUser(int uid) {
