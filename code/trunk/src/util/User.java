@@ -30,7 +30,7 @@ public abstract class User implements Comparable<User>, Serializable{
      */
 	protected User(int userId){
 		if (userId < 0)
-            throw new IllegalArgumentException("Illegal user id: " + userId);
+            throw new IllegalArgumentException("User id must be nonnegative. ");
 		this.userId = userId;
 	}
 
@@ -62,11 +62,11 @@ public abstract class User implements Comparable<User>, Serializable{
 	}
 	
 	/**
-	 * Converts this <tt>User</tt> object to a String of the form <code>"User"+userId</code>. 
+	 * Converts this <tt>User</tt> object to a String of the form <code>"User:"+userId</code>. 
 	 */	
 	@Override
 	public String toString() {
-		return "User"+userId;
+		return "User:"+userId;
 	}	
 
 	/**
