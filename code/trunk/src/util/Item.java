@@ -30,7 +30,7 @@ public abstract class Item implements Comparable<Item>, Serializable{
      */
 	protected Item(int itemId){
 		if (itemId < 0)
-            throw new IllegalArgumentException("Illegal item id: " + itemId);
+            throw new IllegalArgumentException("Item id must be nonnegative. ");
 		this.itemId = itemId;
 	}
 
@@ -62,11 +62,11 @@ public abstract class Item implements Comparable<Item>, Serializable{
 	}
 	
 	/**
-	 * Converts this <tt>Item</tt> object to a String of the form <code>"Item"+itemId</code>. 
+	 * Converts this <tt>Item</tt> object to a String of the form <code>"Item:"+itemId</code>. 
 	 */	
 	@Override
 	public String toString() {
-		return "Item"+itemId;
+		return "Item:"+itemId;
 	}	
 
 	/**

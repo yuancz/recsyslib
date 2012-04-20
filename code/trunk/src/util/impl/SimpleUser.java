@@ -1,4 +1,6 @@
-package util;
+package util.impl;
+
+import util.User;
 
 
 /**

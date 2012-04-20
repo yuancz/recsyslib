@@ -32,15 +32,31 @@ public class Rate implements Comparable<Rate> {
 		return item.getItemId();
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this)return true;
+		if(!(obj instanceof Rate))return false;
+		Rate r = (Rate)obj;
+		return this.getUser().equals(r.getUser()) && this.getItem().equals(r.getItem()) && this.getRate() == r.getRate();
+	}
+
+	@Override
+	public String toString() {
+		return this.getUser().toString()+"\t"+this.getItem().toString()+"\tRate:"+this.getRate();
+	}
+
 	/**
 	 * Compares this rate to another for order.
-	 * Two rates are compared by their <code>rate</code> values.  
+	 * If two rates are related to same user, they are compared by their <code>rate</code> values. 
 	 * Returns a negative integer, zero, or a positive integer as this <code>rate</code> is 
 	 * less than, equal to, or greater than the specified rate's <code>rate</code>.
+	 * Otherwise return the result that the user of this rate compares to the user of another rate. 
 	 */
 	@Override
 	public int compareTo(Rate r) {
-		return Double.compare(this.getRate(), r.getRate());
+		if(this.getUser().equals(r.getUser()))
+			return Double.compare(this.getRate(), r.getRate());
+		else return this.getUser().compareTo(r.getUser());
 	}
 
 }
