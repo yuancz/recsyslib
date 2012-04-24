@@ -16,12 +16,13 @@ public class SimpleItemSet implements ItemSet {
 	
 	@Override
 	public boolean addItem(Item item){
-		if(item == null)
-			throw new IllegalArgumentException("Illegal argument: null");
+		if(item == null)return false;
 		int itemId = item.getItemId();
-		if(map.containsKey(itemId))return false;
-		map.put(itemId, item);
-		return true;
+		if(!map.containsKey(itemId)){
+			map.put(itemId, item);
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -42,6 +43,11 @@ public class SimpleItemSet implements ItemSet {
 	@Override
 	public Item getItem(int itemId) {
 		return map.get(itemId);
+	}
+
+	@Override
+	public boolean containsItem(int itemId) {
+		return map.containsKey(itemId);
 	}
 
 }

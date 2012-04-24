@@ -16,12 +16,13 @@ public class SimpleUserSet implements UserSet {
 	
 	@Override
 	public boolean addUser(User user){
-		if(user == null)
-			throw new IllegalArgumentException("Illegal argument: null");
+		if(user == null)return false;
 		int userId = user.getUserId();
-		if(map.containsKey(userId))return false;
-		map.put(userId, user);
-		return true;
+		if(!map.containsKey(userId)){
+			map.put(userId, user);
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -42,6 +43,11 @@ public class SimpleUserSet implements UserSet {
 	@Override
 	public User getUser(int userId) {
 		return map.get(userId);
+	}
+
+	@Override
+	public boolean containsUser(int userId) {
+		return map.containsKey(userId);
 	}
 
 }

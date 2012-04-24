@@ -5,7 +5,6 @@ import java.util.Set;
 import util.DataSet;
 import util.Item;
 import util.ItemSet;
-import util.Rate;
 import util.RateSet;
 import util.User;
 import util.UserSet;
@@ -64,14 +63,13 @@ public class SimpleDataSet implements DataSet {
 
 	@Override
 	public boolean addRate(Rate rate) {
-		boolean canAdd = rates.addRate(rate);
-		if(canAdd){
-			User user = rate.getUser();
-			Item item = rate.getItem();
-			users.addUser(user);
-			items.addItem(item);
+		if(rate == null)return false;
+		int userId = rate.getUserId();
+		int itemId = rate.getItemId();
+		if(users.containsUser(userId) && items.containsItem(itemId)){
+			return rates.addRate(rate);
 		}
-		return canAdd;
+		return false;
 	}
 
 	@Override
@@ -115,13 +113,23 @@ public class SimpleDataSet implements DataSet {
 	}
 
 	@Override
-	public Rate changeRate(Rate rate) {
-		return rates.changeRate(rate);
+	public Rate removeRate(int userId, int itemId) {
+		return rates.removeRate(userId, itemId);
 	}
 
 	@Override
-	public Rate removeRate(int userId, int itemId) {
-		return rates.removeRate(userId, itemId);
+	public boolean containsUser(int userId) {
+		return users.containsUser(userId);
+	}
+
+	@Override
+	public boolean containsItem(int itemId) {
+		return items.containsItem(itemId);
+	}
+
+	@Override
+	public boolean containsRate(Rate rate) {
+		return rates.containsRate(rate);
 	}
 
 }

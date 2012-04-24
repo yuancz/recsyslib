@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import util.Rate;
 import util.RateSet;
 
 public class SimpleRateSet implements RateSet {
@@ -17,12 +16,10 @@ public class SimpleRateSet implements RateSet {
 	
 	@Override
 	public boolean addRate(Rate rate){
-		if(rate == null)
-			throw new IllegalArgumentException("Illegal argument: null");
+		if(rate == null)return false;
 		int userId = rate.getUserId();
 		int itemId = rate.getItemId();
-		if(!map.containsKey(userId))map.put(userId, new HashMap<Integer, Rate>());	
-		if(map.get(userId).containsKey(itemId))return false;
+		if(!map.containsKey(userId))map.put(userId, new HashMap<Integer, Rate>());
 		map.get(userId).put(itemId, rate);
 		return true;
 	}
@@ -35,18 +32,6 @@ public class SimpleRateSet implements RateSet {
 			return rate;
 		}
 		return null;		
-	}
-	
-	@Override
-	public Rate changeRate(Rate rate){
-		if(rate == null)
-			throw new IllegalArgumentException("Illegal argument: null");
-		int userId = rate.getUserId();
-		int itemId = rate.getItemId();
-		if(map.containsKey(userId) && map.get(userId).containsKey(itemId)){
-			return map.get(userId).put(itemId, rate);
-		}
-		return null;
 	}
 
 	@Override
@@ -104,6 +89,16 @@ public class SimpleRateSet implements RateSet {
 			}
 		}
 		return items;
+	}
+
+	@Override
+	public boolean containsRate(Rate rate) {
+		if(rate == null)return false;
+		int userId = rate.getUserId();
+		int itemId = rate.getItemId();
+		return map.containsKey(userId) 
+				&& map.get(userId).containsKey(itemId) 
+				&& map.get(userId).get(itemId).equals(rate);
 	}
 
 }
