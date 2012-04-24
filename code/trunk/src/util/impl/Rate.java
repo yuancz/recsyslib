@@ -1,7 +1,7 @@
 package util.impl;
 
 import util.RecSysLibException;
-import common.Pair;
+import commons.collections.Pair;
 
 public final class Rate extends Pair<Pair<Integer, Integer>, Double> implements Comparable<Rate> {
 
@@ -38,7 +38,7 @@ public final class Rate extends Pair<Pair<Integer, Integer>, Double> implements 
 
 	@Override
 	public String toString() {
-		return "User "+this.getUserId()+" rates Item "+this.getItemId()+" as "+this.getRate();
+		return "User_"+this.getUserId()+" rates Item_"+this.getItemId()+" as "+this.getRate();
 	}
 	
 	/**

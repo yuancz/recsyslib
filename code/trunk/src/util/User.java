@@ -58,15 +58,15 @@ public abstract class User implements Comparable<User>, Serializable{
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return userId;
 	}
 	
 	/**
-	 * Converts this <tt>User</tt> object to a String of the form <code>"User:"+userId</code>. 
+	 * Converts this <tt>User</tt> object to a String of the form <code>"User_"+userId</code>. 
 	 */	
 	@Override
 	public String toString() {
-		return "User:"+userId;
+		return "User_"+userId;
 	}	
 
 	/**

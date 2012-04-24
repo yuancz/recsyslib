@@ -58,15 +58,15 @@ public abstract class Item implements Comparable<Item>, Serializable{
 
 	@Override
 	public int hashCode() {
-		return super.hashCode();
+		return itemId;
 	}
 	
 	/**
-	 * Converts this <tt>Item</tt> object to a String of the form <code>"Item:"+itemId</code>. 
+	 * Converts this <tt>Item</tt> object to a String of the form <code>"Item_"+itemId</code>. 
 	 */	
 	@Override
 	public String toString() {
-		return "Item:"+itemId;
+		return "Item_"+itemId;
 	}	
 
 	/**
