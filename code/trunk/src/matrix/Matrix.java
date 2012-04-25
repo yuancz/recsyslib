@@ -9,4 +9,6 @@ public interface Matrix {
 	public abstract double setValue(int row, int column, double value);
 	public abstract Vector getRowVector(int row);
 	public abstract Vector getColumnVector(int column);
+	public abstract Matrix getSubMatrix(int startRow, int startColumn, int rowNum, int columnNum);
+	public abstract double[][] toArray();
 }

@@ -11,4 +11,6 @@ public interface Vector {
 	public abstract double getValue(int index);
 	public abstract double setValue(int index, double value);
 	public abstract Matrix toMatrix(Type t);
+	public abstract Vector subVector(int startIndex, int subLength);
+	public abstract double[] toArray();
 }
