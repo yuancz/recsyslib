@@ -1,47 +1,130 @@
 package matrix;
 
-public class Matrics {
+import util.RecSysLibException;
+
+public final class Matrics {
 	
-	private static void check(Matrix m1, Matrix m2){
-		if(m1.getRowNum()!=m2.getRowNum() || m1.getColumnNum()!=m2.getColumnNum())
-			throw new ArithmeticException("Matrix addition or subtraction requests two matrics with same number of rows and columns. ");
+	private static enum  OperationType{
+		ADD,
+		SUB,
+		MULT,
+		TRANS,
+		SCALAR_MULT,
+		TRACE
 	}
 	
-	public static Matrix addition(Matrix m1, Matrix m2){
-		check(m1,m2);
+	private static void check(OperationType opType, Matrix... m){
+		switch(opType){
+		case ADD:
+		case SUB:
+			if(m[0].getRowNum()!=m[1].getRowNum() || m[0].getColumnNum()!=m[1].getColumnNum())
+				throw new RecSysLibException("Matrix addition or subtraction requests " +
+						"two matrics with same number of rows and columns. ");
+			break;
+		case MULT:
+			if(m[0].getColumnNum() != m[1].getRowNum())
+				throw new RecSysLibException("Matrix multiplication requests " +
+						"the column number of first matrix equals the row number of second one. ");
+			break;
+		case TRACE:
+			if(!isSquareMatrix(m[0]))
+				throw new RecSysLibException("Can not compute trace for a non-square matrix. ");
+			break;
+		default:			
+		}
+	}
+	
+	public static boolean isSquareMatrix(Matrix m){
+		return m.getRowNum() == m.getColumnNum();
+	}
+	
+	public static double trace(Matrix m){
+		check(OperationType.TRACE, m);
+		int row = m.getRowNum();
+		double trace = 0;
+		for(int i = 0;i<row;i++){
+			trace += m.getValue(i, i);
+		}
+		return trace;
+	}
+	
+	public static Matrix scalarMult(double d, Matrix m){
+		check(OperationType.SCALAR_MULT, m);
+		int row = m.getRowNum();
+		int column = m.getColumnNum();
+		Matrix result = new SparseMatrix(row, column);
+		for(int i = 0;i<row;i++){
+			for(int j = 0;j<column;j++){
+				double value = d*m.getValue(row, column);
+				result.setValue(row, column, value);
+			}
+		}
+		return result;
+	}
+	
+	public static Matrix trans(Matrix m){
+		check(OperationType.TRANS, m);
+		int row = m.getColumnNum();
+		int column = m.getRowNum();
+		Matrix result = new SparseMatrix(row, column);
+		for(int i = 0;i<row;i++){
+			for(int j = 0;j<column;j++){
+				double value = m.getValue(column, row);
+				result.setValue(row, column, value);
+			}
+		}
+		return result;
+	}
+	
+	public static Matrix mult(Matrix m1, Matrix m2){
+		check(OperationType.MULT, m1, m2);
+		int row = m1.getRowNum();
+		int column = m2.getColumnNum();
+		Matrix result = new SparseMatrix(row, column);
+		int n = m1.getColumnNum();
+		for(int i = 0;i<row;i++){
+			for(int j = 0;j<column;j++){
+				Vector rv = m1.getRowVector(i);
+				Vector cv = m2.getColumnVector(j);
+				double value = 0;
+				for(int k = 0;k<n;k++){
+					value += rv.getValue(k)*cv.getValue(k);
+				}
+				result.setValue(i, j, value);
+			}
+		}
+		return result;
+	}
+	
+	public static Matrix add(Matrix m1, Matrix m2){
+		check(OperationType.ADD, m1, m2);
 		int row = m1.getRowNum();
 		int column = m1.getColumnNum();
-		Matrix m = new SparseMatrix(row, column);
+		Matrix result = new SparseMatrix(row, column);
 		for(int i = 0;i<row;i++){
 			for(int j = 0;j<column;j++){
 				double v1 = m1.getValue(i, j);
 				double v2 = m2.getValue(i, j);
-				if(v1 == Matrix.EMPTY_VALUE)v1 = 0;
-				if(v2 == Matrix.EMPTY_VALUE)v2 = 0;
 				double v = v1 + v2;
-				if(v != 0)m.setValue(i, j, v);
+				result.setValue(i, j, v);
 			}
 		}
-		return m;
-	}
+		return result;
+	}		
 	
-	
-	
-	public static Matrix subtraction(Matrix m1, Matrix m2){
-		check(m1,m2);
+	public static Matrix sub(Matrix m1, Matrix m2){
+		check(OperationType.SUB, m1, m2);
 		int row = m1.getRowNum();
 		int column = m1.getColumnNum();
-		Matrix m = new SparseMatrix(row, column);
+		Matrix result = new SparseMatrix(row, column);
 		for(int i = 0;i<row;i++){
 			for(int j = 0;j<column;j++){
 				double v1 = m1.getValue(i, j);
 				double v2 = m2.getValue(i, j);
-				if(v1 == Matrix.EMPTY_VALUE)v1 = 0;
-				if(v2 == Matrix.EMPTY_VALUE)v2 = 0;
 				double v = v1 - v2;
-				if(v != 0)m.setValue(i, j, v);
+				result.setValue(i, j, v);
 			}
 		}
-		return m;
+		return result;
 	}
 }

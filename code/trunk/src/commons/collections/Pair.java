@@ -36,7 +36,7 @@ public class Pair<K, V> {
 	}
 	@Override
 	public String toString() {
-		return key.toString()+"="+value.toString();
+		return "<"+key.toString()+", "+value.toString()+">";
 	}
 	public K getKey() {
 		return key;
