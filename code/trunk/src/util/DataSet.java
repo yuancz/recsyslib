@@ -1,7 +1,12 @@
 package util;
 
-import util.impl.Rate;
-
+/**
+ * The interface <tt>DataSet</tt> presents a data set which includes users, items and rates in Recommender Systems.
+ * In order to consistency, the <tt>addRate(Rate)</tt> method are redefined. 
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ */
 public interface DataSet extends UserSet, ItemSet, RateSet {
 	/**
 	 * Add a rate into this data set. If there is a rate r in this data set

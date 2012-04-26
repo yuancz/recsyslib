@@ -5,7 +5,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import util.RateSet;
+import util.Rate;
 
+/**
+ * This class implements the <tt>RateSet</tt> interface, 
+ * backed by a <code>HashMap<Integer, HashMap<Integer, Rate>></code> instance.
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see Rate
+ * @see RateSet
+ * @see HashMap
+ */
 public class SimpleRateSet implements RateSet {
 	
 	private HashMap<Integer, HashMap<Integer, Rate>> map;
@@ -96,9 +107,14 @@ public class SimpleRateSet implements RateSet {
 		if(rate == null)return false;
 		int userId = rate.getUserId();
 		int itemId = rate.getItemId();
-		return map.containsKey(userId) 
-				&& map.get(userId).containsKey(itemId) 
+		return containsRate(userId, itemId)
 				&& map.get(userId).get(itemId).equals(rate);
+	}
+
+	@Override
+	public boolean containsRate(int userId, int itemId) {
+		return map.containsKey(userId) 
+				&& map.get(userId).containsKey(itemId);
 	}
 
 }

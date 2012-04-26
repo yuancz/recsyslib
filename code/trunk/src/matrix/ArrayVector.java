@@ -1,5 +1,11 @@
 package matrix;
 
+/**
+ * This class implements the <tt>Vector</tt> interface, backed by a <tt>double[]</tt> instance. 
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ */
 public class ArrayVector extends AbstractVector implements Vector {
 	
 	protected double[] arr;
