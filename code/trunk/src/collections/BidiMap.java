@@ -7,7 +7,9 @@ import java.util.Set;
  * Defines a map that allows bidirectional lookup between key and values.
  * It actually saves the one-to-one correspondence between keys and values. 
  * It does not permit null as either key or value. 
- * @author tanchang
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
  */
 public interface BidiMap<K, V> extends Map<K, V> {
 

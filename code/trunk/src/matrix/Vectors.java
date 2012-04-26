@@ -2,7 +2,15 @@ package matrix;
 
 import util.RecSysLibException;
 
-public class Vectors {
+/**
+ * This class provides some useful methods for vector operation.   
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see Matrix
+ * @see Vector
+ */
+public final class Vectors {
 	private static enum  OperationType{
 		ADD,
 		SUB,
@@ -22,10 +30,18 @@ public class Vectors {
 		}
 	}
 	
+	/**
+	 * Converts the vector v to a matrix. 
+	 * If seeing this vector as a row vector, the matrix will be one-row matrix,
+	 * else one-column matrix. 
+	 */
 	public static Matrix toMatrix(Vector v, Vector.Type t){
 		return v.toMatrix(t);
 	}
 	
+	/**
+	 * Return the dot product of these two vectors 
+	 */
 	public static double dotMult(Vector v1, Vector v2){
 		check(OperationType.DOT_MULT, v1, v2);
 		int length = v1.getLength();
@@ -36,6 +52,9 @@ public class Vectors {
 		return result;
 	}
 	
+	/**
+	 * Return the scalar product of the vector v and the real number d
+	 */
 	public static Vector scalarMult(double d, Vector v){
 		check(OperationType.SCALAR_MULT, v);
 		int length = v.getLength();
@@ -47,6 +66,9 @@ public class Vectors {
 		return result;
 	}
 	
+	/**
+	 * vector addition
+	 */
 	public static Vector add(Vector v1, Vector v2){
 		check(OperationType.ADD, v1, v2);
 		int length = v1.getLength();
@@ -58,6 +80,9 @@ public class Vectors {
 		return result;
 	}
 	
+	/**
+	 * vector subtraction
+	 */
 	public static Vector sub(Vector v1, Vector v2){
 		check(OperationType.SUB, v1, v2);
 		int length = v1.getLength();

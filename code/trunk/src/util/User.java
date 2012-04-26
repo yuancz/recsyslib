@@ -1,7 +1,5 @@
 package util;
 
-import java.io.Serializable;
-
 /**
  * The abstract class <tt>User</tt> is the superclass of all <tt>User</tt> objects in Recommender Systems. 
  * <p>To distinguish from others, each <tt>User</tt> object should have a unique nonnegative integer <code>userId</code> (user id). 
@@ -9,15 +7,10 @@ import java.io.Serializable;
  * To implement a <tt>User</tt> object, the programmer should provide a constructor with argument <code>userId</code>. 
  * <p> This class implements the <tt>Comparable</tt> interface by the comparison of the <code>userId</code> value. 
  * @version 1.0 2012-4-19
- * @author tanchang
+ * @author Tan Chang
  * @since JDK 1.7
  */
-public abstract class User implements Comparable<User>, Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1707920089838343245L;
+public abstract class User implements Comparable<User> {
 	
 	protected int userId;
 	
@@ -30,7 +23,7 @@ public abstract class User implements Comparable<User>, Serializable{
      */
 	protected User(int userId){
 		if (userId < 0)
-            throw new IllegalArgumentException("User id must be nonnegative. ");
+            throw new RecSysLibException("User id must be nonnegative. ");
 		this.userId = userId;
 	}
 
@@ -56,6 +49,9 @@ public abstract class User implements Comparable<User>, Serializable{
         return user.getUserId() == this.userId;
 	}
 
+	/**
+	 * Returns <code>userId</code>
+	 */	
 	@Override
 	public int hashCode() {
 		return userId;

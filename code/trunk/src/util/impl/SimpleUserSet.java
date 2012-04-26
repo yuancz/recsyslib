@@ -6,6 +6,15 @@ import java.util.Set;
 import util.User;
 import util.UserSet;
 
+/**
+ * This class implements the <tt>UserSet</tt> interface, 
+ * backed by a <code>HashMap<Integer, User></code> instance.
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see User
+ * @see HashMap
+ */
 public class SimpleUserSet implements UserSet {
 	
 	private HashMap<Integer, User> map;

@@ -6,6 +6,15 @@ import java.util.Set;
 import util.Item;
 import util.ItemSet;
 
+/**
+ * This class implements the <tt>ItemSet</tt> interface, 
+ * backed by a <code>HashMap<Integer, Item></code> instance.
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see Item
+ * @see HashMap
+ */
 public class SimpleItemSet implements ItemSet {
 	
 	private HashMap<Integer, Item> map;

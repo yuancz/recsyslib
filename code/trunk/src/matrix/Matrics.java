@@ -2,6 +2,14 @@ package matrix;
 
 import util.RecSysLibException;
 
+/**
+ * This class provides some useful methods for vector operation.   
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see Matrix
+ * @see Vector
+ */
 public final class Matrics {
 	
 	private static enum  OperationType{
@@ -34,10 +42,16 @@ public final class Matrics {
 		}
 	}
 	
+	/**
+	 * Checks whether or not a matrix is a square matrix
+	 */
 	public static boolean isSquareMatrix(Matrix m){
 		return m.getRowNum() == m.getColumnNum();
 	}
 	
+	/**
+	 * matrix trace
+	 */
 	public static double trace(Matrix m){
 		check(OperationType.TRACE, m);
 		int row = m.getRowNum();
@@ -48,6 +62,9 @@ public final class Matrics {
 		return trace;
 	}
 	
+	/**
+	 * Return the scalar product of the matrix m and the real number d
+	 */
 	public static Matrix scalarMult(double d, Matrix m){
 		check(OperationType.SCALAR_MULT, m);
 		int row = m.getRowNum();
@@ -62,6 +79,9 @@ public final class Matrics {
 		return result;
 	}
 	
+	/**
+	 * matrix transposition
+	 */
 	public static Matrix trans(Matrix m){
 		check(OperationType.TRANS, m);
 		int row = m.getColumnNum();
@@ -76,6 +96,9 @@ public final class Matrics {
 		return result;
 	}
 	
+	/**
+	 * matrix multiplication
+	 */
 	public static Matrix mult(Matrix m1, Matrix m2){
 		check(OperationType.MULT, m1, m2);
 		int row = m1.getRowNum();
@@ -96,6 +119,9 @@ public final class Matrics {
 		return result;
 	}
 	
+	/**
+	 * matrix addition
+	 */
 	public static Matrix add(Matrix m1, Matrix m2){
 		check(OperationType.ADD, m1, m2);
 		int row = m1.getRowNum();
@@ -112,6 +138,9 @@ public final class Matrics {
 		return result;
 	}		
 	
+	/**
+	 * matrix subtraction
+	 */
 	public static Matrix sub(Matrix m1, Matrix m2){
 		check(OperationType.SUB, m1, m2);
 		int row = m1.getRowNum();

@@ -5,10 +5,18 @@ import java.util.Set;
 import util.DataSet;
 import util.Item;
 import util.ItemSet;
+import util.Rate;
 import util.RateSet;
 import util.User;
 import util.UserSet;
 
+/**
+ * This class implements the <tt>DataSet</tt> interface, backed by a <code>UserSet</code> instance, 
+ * an <code>ItemSet</code> instance and a <code>RateSet</code> instance.
+ * @version 1.0 2012-4-26
+ * @author Tan Chang
+ * @since JDK 1.7
+ */
 public class SimpleDataSet implements DataSet {
 	
 	private UserSet users;
@@ -130,6 +138,11 @@ public class SimpleDataSet implements DataSet {
 	@Override
 	public boolean containsRate(Rate rate) {
 		return rates.containsRate(rate);
+	}
+
+	@Override
+	public boolean containsRate(int userId, int itemId) {
+		return rates.containsRate(userId, itemId);
 	}
 
 }

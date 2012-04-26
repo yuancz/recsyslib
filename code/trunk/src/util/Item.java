@@ -1,7 +1,5 @@
 package util;
 
-import java.io.Serializable;
-
 /**
  * The abstract class <tt>Item</tt> is the superclass of all <tt>Item</tt> objects in Recommender Systems. 
  * <p>To distinguish from others, each <tt>Item</tt> object should have a unique nonnegative integer <code>itemId</code> (item id). 
@@ -9,15 +7,10 @@ import java.io.Serializable;
  * To implement a <tt>Item</tt> object, the programmer should provide a constructor with argument <code>itemId</code>. 
  * <p> This class implements the <tt>Comparable</tt> interface by the comparison of the <code>itemId</code> value. 
  * @version 1.0 2012-4-10
- * @author tanchang
+ * @author Tan Chang
  * @since JDK 1.7
  */
-public abstract class Item implements Comparable<Item>, Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1707920089838343245L;
+public abstract class Item implements Comparable<Item> {
 	
 	protected int itemId;
 	
@@ -30,7 +23,7 @@ public abstract class Item implements Comparable<Item>, Serializable{
      */
 	protected Item(int itemId){
 		if (itemId < 0)
-            throw new IllegalArgumentException("Item id must be nonnegative. ");
+            throw new RecSysLibException("Item id must be nonnegative. ");
 		this.itemId = itemId;
 	}
 
@@ -56,6 +49,9 @@ public abstract class Item implements Comparable<Item>, Serializable{
         return item.getItemId() == this.itemId;
 	}
 
+	/**
+	 * Returns <code>itemId</code>
+	 */	
 	@Override
 	public int hashCode() {
 		return itemId;
