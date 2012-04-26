@@ -1,4 +1,4 @@
-package commons.collections;
+package collections;
 
 import java.util.Map;
 import java.util.Set;

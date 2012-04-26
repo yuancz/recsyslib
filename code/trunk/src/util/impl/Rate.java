@@ -1,7 +1,7 @@
 package util.impl;
 
+import collections.Pair;
 import util.RecSysLibException;
-import commons.collections.Pair;
 
 public final class Rate extends Pair<Pair<Integer, Integer>, Double> implements Comparable<Rate> {
 

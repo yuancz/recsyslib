@@ -1,10 +1,10 @@
-package commons.collections.bidimap;
+package collections;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import commons.collections.BidiMap;
 
 import util.RecSysLibException;
 
@@ -13,12 +13,10 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 	protected transient Map<K,V> kvMap;
 	protected transient Map<V,K> vkMap;
 	protected transient BidiMap<V,K> reversed;
-	protected transient boolean changed;
 	
 	protected AbstractBidiMap(){
-		createMaps();
+		createInnerMaps();
 		reversed = null;
-		changed = false;
 	}
 	
 	protected AbstractBidiMap(BidiMap<? extends K, ? extends V> bidiMap){
@@ -27,20 +25,30 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 			put(e.getKey(), e.getValue());
 		}
 	}
-				
-	protected abstract void createMaps();
-
-	public abstract BidiMap<V, K> getReversedBidiMap();
 	
-	private void changed(){
-		changed = true;
+	protected AbstractBidiMap(Map<? extends K, ? extends V> map){
+		this();
+		for(Entry<? extends K, ? extends V> e : map.entrySet()){
+			put(e.getKey(), e.getValue());
+		}
+	}			
+				
+	protected abstract void createInnerMaps();
+	
+	protected abstract BidiMap<V, K> getReversed();
+	
+	@Override
+	public BidiMap<V, K> getReversedBidiMap() {
+		if(reversed == null){
+			reversed = getReversed();
+		}
+		return reversed;
 	}
 	
 	@Override
 	public void clear() {
 		kvMap.clear();
 		vkMap.clear();
-		changed();
 	}
 	
 	@Override
@@ -48,7 +56,6 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 		V value = kvMap.remove(key);		
 		if(value != null){
 			vkMap.remove(value);
-			changed();
 		}
 		return value;
 	}
@@ -58,7 +65,6 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 		K key = vkMap.remove(value);
 		if(key != null){
 			kvMap.remove(key);
-			changed();
 		}
 		return key;
 	}
@@ -72,7 +78,6 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 	public V put(K key, V value) {	
 		if(key==null || value==null)
 			throw new RecSysLibException("Illegal value: null");
-		changed();
 		vkMap.put(value, key);
 		return kvMap.put(key, value);
 	}
@@ -83,8 +88,6 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 			put(e.getKey(), e.getValue());
 		}		
 	}
-
-
 
 	@Override
 	public Set<K> keySet() {
@@ -103,7 +106,7 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 	
 	@Override
 	public Collection<V> values() {
-		return kvMap.values();
+		return vkMap.keySet();
 	}
 
 	@Override
@@ -139,6 +142,48 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 	@Override
 	public V get(Object key) {
 		return getValue(key);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this)
+			return true;
+		if(!(obj instanceof BidiMap))
+			return false;
+		BidiMap<?,?> bm = (BidiMap<?,?>)obj;
+		if(bm.size() != size())return false;
+		for(K key : keySet()){
+			if(!(bm.containsKey(key) && getValue(key).equals(bm.getValue(key))))return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+        int h = 0;
+        Iterator<Entry<K,V>> i = entrySet().iterator();
+        while (i.hasNext())
+            h += i.next().hashCode();
+        return h;
+	}
+
+	@Override
+	public String toString() {
+        Iterator<Entry<K,V>> i = entrySet().iterator();
+        if (! i.hasNext())
+            return "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        while(i.hasNext()) {
+            Entry<K,V> e = i.next();
+            K key = e.getKey();
+            V value = e.getValue();
+            sb.append(key == this ? "(this)" : key);
+            sb.append('=');
+            sb.append(value == this ? "(this)" : value);
+            sb.append(',').append(' ');
+        }
+        return sb.append('}').toString();
 	}
 
 }
