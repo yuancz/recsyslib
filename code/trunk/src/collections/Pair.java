@@ -1,7 +1,7 @@
 package collections;
 
 /**
- * This class presents a composition of two objects. It permits null value.  
+ * This class presents a composition of two objects. It permits null as key or value.  
  * @version 1.0 2012-4-26
  * @author Tan Chang
  * @since JDK 1.7

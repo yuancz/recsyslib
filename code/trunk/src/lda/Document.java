@@ -1,38 +1,18 @@
 package lda;
 
-import java.util.Set;
+import java.util.Iterator;
 
-import collections.Bag;
-import collections.HashBag;
-
-public final class Document {
+/**
+ * The interface <tt>Document</tt> presents a document. 
+ * A document at least includes a main body composited by words. 
+ * @version 1.0 2012-4-27
+ * @author Tan Chang
+ * @since JDK 1.7
+ */
+public interface Document extends Iterable<String>{
 	
-	private String title;
-	
-	private Bag<Integer> bag;//Integer: wordId
-	
-	public Document(String title){
-		this.title = title;
-		bag = new HashBag<>();
-	}
-	
-	public void addWord(int id){
-		bag.add(id);
-	}
-	
-	public String getTitle(){
-		return title;
-	}
-	
-	public int getWordCount(int id){
-		return bag.getCount(id);
-	}
-	
-	public Set<Integer> getWordIdSet(){
-		return bag.uniqueSet();
-	}
-	
-	public int getTotalWordCount(){
-		return bag.size();
-	}
+	/**
+	 * Returns an iterator which can iterate each word in the main body of this document. 
+	 */
+	public Iterator<String> iterator();
 }

@@ -8,7 +8,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-
+/**
+ * This class provides a skeletal implementation of the <tt>Bag</tt> interface 
+ * to minimize the effort required to implement this interface.
+ * It is backed by a <tt>Map<E, Integer></tt> instance. 
+ * To implement a bag, the programmer needs only to extend this class and 
+ * provide implementations for the createInnerMap methods. 
+ * @version 1.0 2012-4-27
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see Bag
+ * @see Map
+ */
 public abstract class AbstractBag<E> implements Bag<E> {
 
 	protected transient Map<E, Integer> map;
@@ -26,6 +37,9 @@ public abstract class AbstractBag<E> implements Bag<E> {
 		addAll(c);
 	}
 
+	/**
+	 * Creates the backing map
+	 */
 	protected abstract void createInnerMap();
 
 	@Override

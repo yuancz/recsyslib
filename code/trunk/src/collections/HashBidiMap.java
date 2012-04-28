@@ -3,7 +3,12 @@ package collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * This class implements the <tt>BidiMap</tt> interface, backed by two reversed <tt>HashMap</tt> instances. 
+ * @version 1.0 2012-4-27
+ * @author Tan Chang
+ * @since JDK 1.7
+ */
 public class HashBidiMap<K, V> extends AbstractBidiMap<K, V> implements BidiMap<K, V>{
 
 	public HashBidiMap() {
@@ -24,7 +29,7 @@ public class HashBidiMap<K, V> extends AbstractBidiMap<K, V> implements BidiMap<
 		vkMap = new HashMap<>();		
 	}
 
-	public BidiMap<V, K> getReversed() {
+	protected BidiMap<V, K> getReversed() {
 		HashBidiMap<V, K> reversed = new HashBidiMap<>();
 		reversed.kvMap = vkMap;
 		reversed.vkMap = kvMap;
