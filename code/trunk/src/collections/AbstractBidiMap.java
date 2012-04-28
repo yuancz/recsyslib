@@ -8,6 +8,18 @@ import java.util.Set;
 
 import util.RecSysLibException;
 
+/**
+ * This class provides a skeletal implementation of the <tt>BidiMap</tt> interface 
+ * to minimize the effort required to implement this interface.
+ * It is backed by two reversed <tt>Map</tt> instances. 
+ * To implement a BidiMap, the programmer needs only to extend this class and 
+ * provide implementations for the createInnerMaps and getReversed methods. 
+ * @version 1.0 2012-4-27
+ * @author Tan Chang
+ * @since JDK 1.7
+ * @see BidiMap
+ * @see Map
+ */
 public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> {
 	
 	protected transient Map<K,V> kvMap;
@@ -33,8 +45,14 @@ public abstract class AbstractBidiMap<K, V> implements Map<K, V>, BidiMap<K, V> 
 		}
 	}			
 				
+	/**
+	 * Creates the backing maps
+	 */
 	protected abstract void createInnerMaps();
 	
+	/**
+	 * Gets a reversed BidiMap of this by swap two maps in this
+	 */
 	protected abstract BidiMap<V, K> getReversed();
 	
 	@Override
