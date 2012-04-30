@@ -1,0 +1,8 @@
+# Texts after the pound sign is comments, will be ignored. 
+numI=1000 # iteration number, default is 1000
+saveI=100 # save intermediate result per saveI iterations, default is 100
+curI=0 # iteration number currently, if >0 will try to load an existing LDA model
+top=100   # show top word in phi, if 0 show all words in the corpus
+numT=100  # topic number, default is 100
+alpha=0.5 # super-parameter alpha, default is 0.5, usually set 50/numT
+beta=0.1  # super-parameter beta, default is 0.1

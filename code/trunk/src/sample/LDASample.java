@@ -1,12 +1,15 @@
 package sample;
 
+import lda.LDA;
+
 public class LDASample {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("+"+' '+"+");
+		LDA lda = new LDA("./data/ldaData/");
+		lda.estimating();
 	}
 
 }

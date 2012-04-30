@@ -1,0 +1,8 @@
+#
+numI=1000
+saveI=100
+curI=0
+top=100
+numT=100
+alpha=0.5
+beta=0.1

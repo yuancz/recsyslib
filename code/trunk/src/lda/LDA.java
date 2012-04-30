@@ -1,10 +1,15 @@
 package lda;
 
+import java.io.File;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import util.RecSysLibException;
+
+import io.CSVReader;
 import io.CSVWriter;
+import io.Outputer;
 
 import collections.Pair;
 
@@ -17,20 +22,17 @@ import collections.Pair;
  * @since JDK 1.7
  * @see GibbsSampler
  */
-public final class LDA {
+public final class LDA {	
 	
-	private static final String PHI = "_phi.csv";
+	// Input parameters
+	private String filePath;// save the result file		
 	
-	private static final String THETA = "_theta.csv";
+	// Inner parameters
+	private GibbsSampler sampler;
 	
-	private static final String DT = "_cntDT.csv";
-	
-	private static final String TW = "_cntTW.csv";
-	
-	// Input
-	private String filePath;// save the result file
-		
 	private Corpus corpus;
+	
+	private LDAConfig config;
 	
 	private int numT;// topic number
 	
@@ -40,20 +42,35 @@ public final class LDA {
 	
 	private int top;// show top word in phi
 	
-	// Inner
-	private GibbsSampler sampler;
-	
 	private int curI;// iteration number currently
 	
-	public LDA(){
-		//TODO
-		// how about save and load cntZ, corpus rebuild, etc
+	/**
+	 * Constructs the LDA model from the folder pointed by the given file path, the result also will be saved in this folder. 
+	 * Two files must already be in this folder, one is corpus.txt, and another is config.txt. 
+	 * @see SimpleCorpusFactory
+	 * @see LDAConfig
+	 */
+	public LDA(String filePath){
+		File folder = new File(filePath);
+		if(!folder.isDirectory())
+			throw new RecSysLibException("The sepcified file path does not exist. ");
+		this.filePath = filePath;
+		corpus = Corpus.createCorpus(filePath+LDAConfig.CORPUS);
+		config = new LDAConfig(filePath+LDAConfig.CONFIG);
+		numT = config.numT;
+		numI = config.numI;
+		saveI = config.saveI;
+		curI = config.curI;
+		top = config.top;
+		if(top == 0)top = corpus.wordCount();
+		if(curI == 0) sampler = new GibbsSampler(corpus, config);
+		else sampler = new GibbsSampler(corpus, config, loadCntZ());
 	}
 
 	public void estimating(){
 		for(int i = 1;i<=numI;i++){
 			sampler.sampling();
-			if(i%saveI == 0){
+			if(saveI > 0 && i%saveI == 0){
 				curI = i;
 				save();
 			}			
@@ -64,30 +81,73 @@ public final class LDA {
 		}
 	}
 	
-	public void save(){
-		savePhi(sampler.getPhi());
-		saveTheta(sampler.getTheta());
-		saveCntDT(sampler.cntDT());
-		saveCntTW(sampler.cntTW());
+	private int[][] loadCntZ(){
+		CSVReader reader = new CSVReader(filePath+curI+LDAConfig.Z);
+		int[][] cntZ = new int[corpus.docCount()][];
+		int docId = -1;;
+		while(reader.hasNext()){
+			String element = reader.next();
+			if(reader.isNewLine()){
+				docId = corpus.getDocId(element);
+				cntZ[docId] = new int[corpus.getDoc(docId).wordCount()];
+			}
+			else {
+				cntZ[docId][reader.getColumn()-1] = Integer.valueOf(element);
+			}
+		}
+		reader.close();
+		return cntZ;
 	}
 	
-	private void saveCntTW(int[][] cntTW) {
-		CSVWriter writer = new CSVWriter(filePath+curI+TW);
-		for(int i = 0;i<cntTW.length;i++){
-			for(int j = 0;j<cntTW[i].length;j++){
-				writer.writeElement(String.valueOf(cntTW[i][j]));
+	public void save(){
+		saveConfig();
+		savePhi(sampler.getPhi());
+		saveTheta(sampler.getTheta());
+		saveCntZ(sampler.getCntZ());
+	}
+	
+	private void saveConfig() {
+		config.curI = curI;
+		Outputer out = new Outputer(filePath+LDAConfig.CONFIG);
+		for(String param : LDAConfig.Params){
+			String line = "";
+			switch(param){
+			case "numI":
+				line = param+"="+config.numI;
+				break;
+			case "saveI":
+				line = param+"="+config.saveI;
+				break;
+			case "curI":
+				line = param+"="+config.curI;
+				break;
+			case "numT":
+				line = param+"="+config.numT;
+				break;
+			case "top":
+				line = param+"="+config.top;
+				break;
+			case "alpha":
+				line = param+"="+config.alpha;
+				break;
+			case "beta":
+				line = param+"="+config.beta;
+				break;
 			}
-			writer.newLine();
+			out.writeLine(line);
 		}
-		writer.flush();
-		writer.close();
+		out.flush();
+		out.close();
 	}
 
-	private void saveCntDT(int[][] cntDT) {
-		CSVWriter writer = new CSVWriter(filePath+curI+DT);
-		for(int i = 0;i<cntDT.length;i++){
-			for(int j = 0;j<cntDT[i].length;j++){
-				writer.writeElement(String.valueOf(cntDT[i][j]));
+	private void saveCntZ(int[][] cntZ) {
+		CSVWriter writer = new CSVWriter(filePath+curI+LDAConfig.Z);
+		for(int docId = 0;docId<corpus.docCount();docId++){
+			Doc doc = corpus.getDoc(docId);
+			String title = doc.getTitle();
+			writer.writeElement(title);
+			for(int w = 0;w<cntZ[docId].length;w++){
+				writer.writeElement(String.valueOf(cntZ[docId][w]));
 			}
 			writer.newLine();
 		}
@@ -96,17 +156,15 @@ public final class LDA {
 	}
 
 	private void saveTheta(double[][] theta) {
-		CSVWriter writer = new CSVWriter(filePath+curI+THETA);
+		CSVWriter writer = new CSVWriter(filePath+curI+LDAConfig.THETA);
 		writer.writeElement("Theta");
 		for(int t = 0;t<numT;t++){
 			writer.writeElement("Topic"+t);
 		}
 		writer.newLine();
 		for(int docId = 0;docId<corpus.docCount();docId++){
-			Document doc = corpus.getDoc(docId);
-			String title;
-			if(doc instanceof SimpleDoc)title = ((SimpleDoc)doc).getTitle();
-			else title = "Doc_"+docId;
+			Doc doc = corpus.getDoc(docId);
+			String title = doc.getTitle();
 			writer.writeElement(title);
 			for(int t = 0;t<numT;t++){
 				writer.writeElement(String.valueOf(theta[docId][t]));
@@ -142,7 +200,7 @@ public final class LDA {
 				i++;
 			}
 		}
-		CSVWriter writer = new CSVWriter(filePath+curI+PHI);
+		CSVWriter writer = new CSVWriter(filePath+curI+LDAConfig.PHI);
 		for(int t = 0;t<numT;t++){
 			writer.writeElement("TOPIC_"+t);
 			writer.writeElement("");
