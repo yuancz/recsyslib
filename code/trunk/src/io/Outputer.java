@@ -77,7 +77,7 @@ public class Outputer {
     }
     
     /**
-     * Closes this Inputer, flushing it first.
+     * Closes this Outputer, flushing it first.
      * @see {@link BufferedWriter#close()}
      */
     public void close(){

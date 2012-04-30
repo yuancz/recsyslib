@@ -2,19 +2,13 @@ package lda;
 
 import java.util.Iterator;
 
-import matrix.Matrix;
-import matrix.SparseMatrix;
-
 import collections.BidiMap;
-import collections.HashBag;
 import collections.HashBidiMap;
 
 /**
  * This <tt>Corpus</tt> class presents a corpus included some documents. 
  * It allows save and index a document and automatically assign an id to each document also for each word. 
- * The toDocWordMatrix method will return a document-word statistics matrix 
- * including all documents and word in this corpus currently.
- * @version 1.0 2012-4-27
+ * @version 1.0 2012-4-29
  * @author Tan Chang
  * @since JDK 1.7
  */
@@ -24,58 +18,38 @@ public final class Corpus {
 	
 	private BidiMap<Integer, Document> documents;
 	
-	private Matrix docWordMatrix;
-	
-	private int modCount;
-	
-	private int modCountUntilToMatrix;
-	
 	/**
 	 * Constructs a empty corpus. 
 	 */
 	public Corpus(){
 		wordMap = new WordMap();
 		documents = new HashBidiMap<>();
-		docWordMatrix = null;
-		modCount = 0;
 	}
 
 	/**
-	 * Adds a new document doc into this corpus, returns false if the doc is null or already in this corpus.  
+	 * Adds a new document doc into this corpus, all words in the document will be parsed and saved into this corpus.
+	 * Returns false if the doc is null or already in this corpus.  
 	 */
-	public boolean addDocument(Document doc){
+	public boolean addDoc(Document doc){
 		if(doc == null || documents.containsValue(doc))return false;
 		int docId = documents.size();
 		documents.put(docId, doc);
-		modCount++;
+		parseDoc(doc);
 		return true;
-	}
-	
-	/**
-	 * Returns a document-word matrix, each row presents a document and each column presents a word, 
-	 * each element is the word count in the document. 
-	 * The id of document or word is the row or column number. 
-	 */
-	public Matrix toDocWordMatrix(){
-		if(docWordMatrix == null || modCountUntilToMatrix < modCount){
-			modCountUntilToMatrix = modCount;
-			docWordMatrix = new SparseMatrix(documents.size(), wordMap.size());
-			for(Document doc : documents.valueSet()){
-				parseDoc(doc);
-			}
-		}
-		return docWordMatrix;
 	}
 	
 	private void parseDoc(Document doc) {
 		Iterator<String> docIte = doc.iterator();
-		HashBag<String> wordCnt = new HashBag<>();
 		while(docIte.hasNext()){
-			wordCnt.add(docIte.next());
+			addWord(docIte.next());
 		}
-		for(String word : wordCnt.uniqueSet()){
-			docWordMatrix.setValue(getDocId(doc), getWordId(word), wordCnt.getCount(word));
-		}
+	}	
+	
+	/**
+	 * @see {@link WordMap#addWord(String)}
+	 */
+	public int addWord(String word){
+		return wordMap.addWord(word);
 	}
 
 	/**
@@ -105,12 +79,28 @@ public final class Corpus {
 	public int getWordId(String word){
 		return wordMap.getWordId(word);
 	}
-	
+
 	/**
-	 * @see {@link WordMap#addWord(String)}
+	 * Returns the document number in this corpus currently. 
 	 */
-	public int addWord(String word){
-		if(!wordMap.containsWord(word))modCount++;
-		return wordMap.addWord(word);
+	public int docCount() {
+		return documents.size();
 	}
+
+	/**
+	 * Returns the word number in this corpus currently. 
+	 * @see {@link WordMap#size()}
+	 */
+	public int wordCount() {
+		return wordMap.size();
+	}
+
+	/**
+	 * Returns the word id of the n-th word in the document with specified docId
+	 */
+	public int getWordId(int docId, int n) {
+		// TODO Auto-generated method stub
+		return getWordId(getDoc(docId).getWord(n));
+	}
+
 }

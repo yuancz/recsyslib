@@ -44,7 +44,7 @@ public class Inputer {
     }
     
     /**
-     * Closes the stream and releases any system resources associated with it.
+     * Closes this inputer and releases any system resources associated with it.
      * @see {@link BufferedReader#close()}
      */
     public void close(){

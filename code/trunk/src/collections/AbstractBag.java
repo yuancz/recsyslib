@@ -180,7 +180,13 @@ public abstract class AbstractBag<E> implements Bag<E> {
             if (canRemove == false) {
                 throw new IllegalStateException();
             }
-            parent.remove(current, 1);
+            int count = parent.map.get(current);
+            if(count>1)parent.map.put(current, count-1);
+            else {
+            	parent.map.remove(current);
+            	uniqueSetIterator.remove();
+            }
+            parent.size--;
             canRemove = false;
 		}
 		
