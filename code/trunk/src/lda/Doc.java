@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A simple implementation of the interface <tt>Document</tt>.
+ * The class <tt>Doc</tt> presents a document. 
  * It assumes that a document includes two String objects, one is title, another is main body. 
  * And in the main body, words are separated by a specified char as the only separator. 
  * If the separator is not specified, the whitespace will be the default separator. 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Tan Chang
  * @since JDK 1.7
  */
-public class SimpleDoc implements Document {
+public final class Doc {
 	
 	public static final char DEFAULT_SEPARATOR = ' ';
 
@@ -28,52 +28,39 @@ public class SimpleDoc implements Document {
 	/**
 	 * Constructs a SimpleDoc by the title, mainBody and separator. 
 	 */
-	public SimpleDoc(String title, String mainBody, char separator){
+	public Doc(String title, String mainBody, char separator){
 		this.title = title;
 		this.mainBody = mainBody;
 		this.separator = separator;
-		wordList = null;
+		wordList = Arrays.asList(mainBody.split(String.valueOf(separator)));
 	}
 	
 	/**
 	 * Constructs a SimpleDoc by the title, mainBody, the separator will be the whitespace. 
 	 */
-	public SimpleDoc(String title, String mainBody){
+	public Doc(String title, String mainBody){
 		this(title, mainBody, DEFAULT_SEPARATOR);
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * Returns an iterator which can iterate each word in the main body of this document. 
 	 */
-	@Override
 	public Iterator<String> iterator() {
-		return getWordList().iterator();
+		return wordList.iterator();
 	}	
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the word number of the main body of this document.
 	 */
-	@Override
 	public int wordCount() {
-		return getWordList().size();
+		return wordList.size();
 	}	
 	
 	/**
-	 * {@inheritDoc}
+	 * Return the n-th word in the main body of this document. 
 	 */
 	public String getWord(int n){
-		return getWordList().get(n);
-	}
-	
-	/**
-	 * Returns the word list through separating the main body. 
-	 * @return
-	 */
-	protected List<String> getWordList() {
-		if(wordList == null){
-			wordList = Arrays.asList(mainBody.split(String.valueOf(separator)));
-		}
-		return wordList;
+		return wordList.get(n);
 	}
 
 	/**
