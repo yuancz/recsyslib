@@ -5,7 +5,6 @@ package lda;
  * @version 1.0 2012-4-27
  * @author Tan Chang
  * @since JDK 1.7
- * @see DataSet
  */
 public interface CorpusFactory {
 	

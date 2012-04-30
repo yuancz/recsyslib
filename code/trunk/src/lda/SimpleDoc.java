@@ -9,7 +9,7 @@ import java.util.List;
  * It assumes that a document includes two String objects, one is title, another is main body. 
  * And in the main body, words are separated by a specified char as the only separator. 
  * If the separator is not specified, the whitespace will be the default separator. 
- * @version 1.0 2012-4-27
+ * @version 1.0 2012-4-29
  * @author Tan Chang
  * @since JDK 1.7
  */
@@ -47,10 +47,33 @@ public class SimpleDoc implements Document {
 	 */
 	@Override
 	public Iterator<String> iterator() {
+		return getWordList().iterator();
+	}	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int wordCount() {
+		return getWordList().size();
+	}	
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getWord(int n){
+		return getWordList().get(n);
+	}
+	
+	/**
+	 * Returns the word list through separating the main body. 
+	 * @return
+	 */
+	protected List<String> getWordList() {
 		if(wordList == null){
 			wordList = Arrays.asList(mainBody.split(String.valueOf(separator)));
 		}
-		return wordList.iterator();
+		return wordList;
 	}
 
 	/**
