@@ -62,11 +62,6 @@ public final class GibbsSampler {
 		this.numT = config.numT;
 		this.alpha = config.alpha;
 		this.beta = config.beta;
-		int i = 0;
-		while(i < corpus.wordCount()){
-			System.out.println(i+" "+corpus.getWord(i));
-			i++;
-		}
 		initCntZ();
 		initTempVariables();
 	}
@@ -109,7 +104,7 @@ public final class GibbsSampler {
 			cntD[docId] = cntW;
 			for (int n = 0; n < cntW; n++) {
 				int topic = cntZ[docId][n];
-				cntTW[topic][corpus.getWordId(docId, n)]++;
+				cntTW[topic][corpus.getWordId(corpus.getDoc(docId).getWord(n))]++;
 				cntT[topic]++;
 				// number of words in document i assigned to topic j
 				cntDT[docId][topic]++;

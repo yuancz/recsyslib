@@ -29,9 +29,9 @@ final class LDAConfig {
 	private static final int ITE = 1000;
 	private static final int SAVE = 100;
 	private static final int CUR_ITE = 0;
-	private static final int TOPIC = 100;
-	private static final int TOP = 0;
-	private static double ALPHA = 50.0/TOPIC;
+	private static final int TOPIC = 50;
+	private static final int TOP = 30;
+	private static double ALPHA = 0.5;
 	private static final double BETA = 0.1;	
 	
 	protected int numI;// iteration number
@@ -79,7 +79,7 @@ final class LDAConfig {
 					alpha = Double.valueOf(strs[1]);
 					break;
 				case "beta":
-					alpha = Double.valueOf(strs[1]);
+					beta = Double.valueOf(strs[1]);
 					break;
 				}
 				params.remove(strs[0]);
@@ -109,7 +109,7 @@ final class LDAConfig {
 					alpha = ALPHA;
 					break;
 				case "beta":
-					alpha = BETA;
+					beta = BETA;
 					break;
 				}
 			}

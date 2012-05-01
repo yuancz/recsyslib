@@ -31,7 +31,7 @@ public final class CSVReader {
 	public CSVReader(String filePath){
 		in = new Inputer(filePath);
 		row = -1;
-		column = -1;
+		column = 0;
 		curLine = new String[0];
 		nextLine = in.readLine();
 		isNewLine = false;
@@ -48,7 +48,7 @@ public final class CSVReader {
 	 * Returns true if existing next element, or false if reaching the file end. 
 	 */
 	public boolean hasNext(){
-		if(column < curLine.length || nextLine != null){
+		if(column < curLine.length-1 || nextLine != null){
 			return true;
 		}
 		return false;
@@ -58,7 +58,7 @@ public final class CSVReader {
 	 * Returns the next element in this CSV file. 
 	 */
 	public String next(){
-		if(column < curLine.length){
+		if(column < curLine.length-1){
 			column++;		
 			isNewLine = false;
 		} else{
