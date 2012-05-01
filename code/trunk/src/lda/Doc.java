@@ -9,7 +9,7 @@ import java.util.List;
  * It assumes that a document includes two String objects, one is title, another is main body. 
  * And in the main body, words are separated by a specified char as the only separator. 
  * If the separator is not specified, the whitespace will be the default separator. 
- * @version 1.0 2012-4-29
+ * @version 1.0 2012-4-30
  * @author Tan Chang
  * @since JDK 1.7
  */

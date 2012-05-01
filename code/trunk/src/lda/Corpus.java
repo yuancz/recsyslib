@@ -33,7 +33,6 @@ public final class Corpus {
 			line = in.readLine();
 		}
 		in.close();
-		System.out.println(corpus.wordMap.wordSet().toString());
 		return corpus;
 	}
 	
@@ -138,7 +137,6 @@ public final class Corpus {
 	 * Returns the word id of the n-th word in the document with specified docId
 	 */
 	public int getWordId(int docId, int n) {
-		System.out.println(docId+" "+n+" "+getDoc(docId).getWord(n));
 		return getWordId(getDoc(docId).getWord(n));
 	}
 

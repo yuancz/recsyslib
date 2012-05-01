@@ -1,9 +1,9 @@
 package lda;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.LinkedList;
 
 import util.RecSysLibException;
 
@@ -47,28 +47,35 @@ public final class LDA {
 	/**
 	 * Constructs the LDA model from the folder pointed by the given file path, the result also will be saved in this folder. 
 	 * Two files must already be in this folder, one is corpus.txt, and another is config.txt. 
-	 * @see SimpleCorpusFactory
+	 * @see Corpus#createCorpus(String)
 	 * @see LDAConfig
 	 */
 	public LDA(String filePath){
+		System.out.println("Initializing LDA...");
 		File folder = new File(filePath);
 		if(!folder.isDirectory())
 			throw new RecSysLibException("The sepcified file path does not exist. ");
 		this.filePath = filePath;
-		corpus = Corpus.createCorpus(filePath+LDAConfig.CORPUS);
 		config = new LDAConfig(filePath+LDAConfig.CONFIG);
-		numT = config.numT;
-		numI = config.numI;
-		saveI = config.saveI;
-		curI = config.curI;
-		top = config.top;
-		if(top == 0)top = corpus.wordCount();
+		System.out.println("Loading corpus...");
+		corpus = Corpus.createCorpus(filePath+LDAConfig.CORPUS);
+		// check curI
+		numI = config.numI;		
+		curI = config.curI;		
 		if(curI == 0) sampler = new GibbsSampler(corpus, config);
-		else sampler = new GibbsSampler(corpus, config, loadCntZ());
+		else if(curI<numI && curI>0)sampler = new GibbsSampler(corpus, config, loadCntZ());
+		else throw new RecSysLibException("The curI value must be in [0, numI). ");		
+		saveI = config.saveI;
+		numT = config.numT;		
+		// check top
+		top = config.top;
+		if(top == 0)top = corpus.wordCount();	
+		System.out.println("Initialization complete. ");
 	}
 
 	public void estimating(){
-		for(int i = 1;i<=numI;i++){
+		for(int i = curI+1;i<=numI;i++){
+			System.out.println("Estimating..."+i);
 			sampler.sampling();
 			if(saveI > 0 && i%saveI == 0){
 				curI = i;
@@ -101,9 +108,9 @@ public final class LDA {
 	
 	public void save(){
 		saveConfig();
-		savePhi(sampler.getPhi());
-		saveTheta(sampler.getTheta());
-		saveCntZ(sampler.getCntZ());
+		savePhi();
+		saveTheta();
+		saveCntZ();
 	}
 	
 	private void saveConfig() {
@@ -140,7 +147,8 @@ public final class LDA {
 		out.close();
 	}
 
-	private void saveCntZ(int[][] cntZ) {
+	private void saveCntZ() {
+		int[][] cntZ = sampler.getCntZ();
 		CSVWriter writer = new CSVWriter(filePath+curI+LDAConfig.Z);
 		for(int docId = 0;docId<corpus.docCount();docId++){
 			Doc doc = corpus.getDoc(docId);
@@ -155,7 +163,8 @@ public final class LDA {
 		writer.close();
 	}
 
-	private void saveTheta(double[][] theta) {
+	private void saveTheta() {
+		double[][] theta = sampler.getTheta();
 		CSVWriter writer = new CSVWriter(filePath+curI+LDAConfig.THETA);
 		writer.writeElement("Theta");
 		for(int t = 0;t<numT;t++){
@@ -182,19 +191,22 @@ public final class LDA {
 		}
 	}
 
-	private void savePhi(double[][] phi) {
+	private void savePhi() {
+		double[][] phi = sampler.getPhi();
 		int numW = corpus.wordCount();
 		String[][] ordered = new String[numT*2][top];
 		for(int t = 0;t<numT;t++){
-			TreeSet<Pair<String, Double>> pairs = new TreeSet<>(new ValueComparator());
+			LinkedList<Pair<String, Double>> pairs = new LinkedList<>();
 			for(int w = 0;w<numW;w++){
 				String word = corpus.getWord(w);
 				pairs.add(new Pair<String, Double>(word, phi[t][w]));
 			}
-			Iterator<Pair<String, Double>> descIte = pairs.descendingIterator();
+			System.out.println(pairs.size()+" "+numW);
+			Collections.sort(pairs, new ValueComparator());
+			System.out.println(pairs.size()+" "+numW);
 			int i = 0;
-			while(descIte.hasNext() && i < top){
-				Pair<String, Double> pair = descIte.next();
+			while(i < top){
+				Pair<String, Double> pair = pairs.get(numW-i-1);
 				ordered[t*2][i] = pair.getKey();
 				ordered[t*2+1][i] = pair.getValue().toString();
 				i++;

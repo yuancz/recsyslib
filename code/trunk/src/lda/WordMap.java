@@ -31,7 +31,7 @@ public final class WordMap{
 	 * If the word is already in this word map, returns existed word id. 
 	 */
 	public int addWord(String word){
-		if(!map.containsValue(word)){
+		if(!map.containsKey(word)){
 			int id = map.size();
 			map.put(word, id);
 			return id;
