@@ -1,5 +1,7 @@
 package cf.predictor;
 
+import util.Rate;
+
 /**
  * The interface <tt>Predictor</tt> presents the objects 
  * which can predict a rating of a user assigning to an item in Recommender Systems.
@@ -8,8 +10,6 @@ package cf.predictor;
  * @since JDK 1.7
  * @see Rate
  */
-import util.Rate;
-
 public interface Predictor {
 	
 	/**
