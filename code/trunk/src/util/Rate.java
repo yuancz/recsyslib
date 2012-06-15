@@ -21,7 +21,7 @@ public class Rate implements Comparable<Rate> {
 	/**
 	 * Sole constructor. For invocation by subclass constructors. Constructs a
 	 * <tt>Rate</tt> with the specified user id, item id and rating.
-	 * @throws IllegalArgumentException
+	 * @throws RecSysLibException
 	 *             if the user id or item id is negative
 	 */
 	public Rate(int userId, int itemId, double rating) {
