@@ -4,7 +4,7 @@ import util.DataSet;
 import util.RecSysLibException;
 
 /**
- * The class <tt>AbstractPredictor</tt> provides a skeletal implementation of the <tt>Predictor</tt> interface 
+ * The class <tt>AbstractPredictor</tt> provides a skeletal implementation of the <tt>Predictor</tt> interface.
  * It provides checkItemId and checkUserId methods for checking whether or not these id exist in the given data set. 
  * @version 1.0 2012-5-1
  * @author Tan Chang
