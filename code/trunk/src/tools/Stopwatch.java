@@ -17,7 +17,7 @@ public class Stopwatch {
 	 * If existing a stopwatch with the name, return the stopwatch,
 	 * else return a new stopwatch. 
 	 */
-	public static Stopwatch getTimer(String name){
+	public static Stopwatch getInstance(String name){
 		if(!map.containsKey(name))map.put(name, new Stopwatch());
 		return map.get(name);
 	}

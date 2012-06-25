@@ -1,4 +1,6 @@
-package evaluation;
+package util.impl;
+
+import util.ResultSet;
 
 /**
  * The interface <tt>ResultSetFactory</tt> provides factory methods for create a result set from different sources.

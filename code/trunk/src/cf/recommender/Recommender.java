@@ -1,9 +1,10 @@
 package cf.recommender;
 
-import java.util.List;
+import java.util.Set;
 
-import util.ItemSet;
-import util.Rate;
+import util.ResultList;
+
+
 
 /**
  * The interface <tt>Recommender</tt> presents the objects 
@@ -17,6 +18,6 @@ public interface Recommender {
 	/**
 	 * Returns the candidate result list of the specified user and items.
 	 */
-	public List<Rate> getResultList(int userId, ItemSet items);
+	public ResultList getResultList(int userId, Set<Integer> itemIds);
 	
 }

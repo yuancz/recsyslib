@@ -2,10 +2,12 @@ package cf.recommender;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import cf.predictor.Predictor;
 import util.ItemSet;
 import util.Rate;
+import util.ResultList;
 
 /**
  * The class <tt>SimpleRecommender</tt> provides a simple implementation of the <tt>Predictor</tt> interface. 
@@ -26,23 +28,17 @@ public class SimpleRecommender implements Recommender {
 		this.predictor = predictor;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public List<Rate> getResultList(int userId, ItemSet items) {
-		List<Rate> result = new LinkedList<Rate>();
-		for(int itemId : items.getItemIds()){
+	public ResultList getResultList(int userId, Set<Integer> itemIds) {
+		ResultList result = new ResultList(userId);
+		for(int itemId : itemIds){
 			Rate rate = predictor.getRate(userId, itemId);
-			int index = indexing(rate, result);
-			result.add(index, rate);
+			result.addRate(rate);
 		}
 		return result;
-	}
-	
-	private int indexing(Rate rate, List<Rate> list){
-		if(list.size()==0)return 0;
-		for(int i = 0;i<list.size();i++){
-			if(rate.getRating() > list.get(i).getRating())return i;
-		}
-		return list.size();
 	}
 
 }
