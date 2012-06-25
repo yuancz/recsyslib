@@ -1,5 +1,10 @@
 package evaluation;
 
+import java.util.Set;
+
+import util.RecSysLibException;
+import util.ResultSet;
+
 /**
  * The class <tt>AbstractEvaluator</tt> provides a skeletal implementation 
  * for different evaluation metrics in Recommender Systems. 
@@ -18,7 +23,16 @@ public abstract class Evaluator {
 	 * Constructs an evaluator with the given result sets. 
 	 */
 	public Evaluator(ResultSet realSet, ResultSet recSet){
+		checkUserIds(realSet.getUserIds(), recSet.getUserIds());
 		this.realSet = realSet;
 		this.recSet = recSet;
+	}
+	
+	/**
+	 * Checks whether or not the result sets contain the same user ids. 
+	 */
+	protected void checkUserIds(Set<Integer> uids1, Set<Integer> uids2){
+		if(!uids1.containsAll(uids2) || !uids2.containsAll(uids1))
+			throw new RecSysLibException("These two result sets do not contain the same user ids.");
 	}
 }
