@@ -3,8 +3,6 @@ package util;
 import java.util.LinkedList;
 import java.util.List;
 
-import evaluation.Evaluator;
-
 
 /**
  * The class <tt>ResultList</tt> presents a candidate result list to a specified user in Recommender Systems.
