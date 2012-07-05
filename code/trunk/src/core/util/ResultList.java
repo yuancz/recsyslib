@@ -1,9 +1,10 @@
-package util;
+package core.util;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import cf.recommender.Recommender;
+import core.recommender.Recommender;
+
 
 
 /**

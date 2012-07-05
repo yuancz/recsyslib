@@ -2,8 +2,9 @@ package util;
 
 /**
  * The interface <tt>DataSet</tt> presents a data set which includes users, items and rates in Recommender Systems.
- * In order to consistency, the <tt>addRate(Rate)</tt> method are redefined. 
- * @version 1.0 2012-4-26
+ * In order to consistency, the <tt>addRate(Rate)</tt>, 
+ * <tt>removeUser(int)</tt> and <tt>removeItem(int)</tt> methods are redefined. 
+ * @version 1.0 2012-7-5
  * @author Tan Chang
  * @since JDK 1.7
  */
