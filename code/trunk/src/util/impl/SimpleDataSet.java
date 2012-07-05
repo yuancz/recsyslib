@@ -1,5 +1,8 @@
 package util.impl;
 
+import io.Inputer;
+import io.Outputer;
+
 import java.util.Set;
 
 import util.DataSet;
@@ -7,6 +10,7 @@ import util.Item;
 import util.ItemSet;
 import util.Rate;
 import util.RateSet;
+import util.ResultList;
 import util.User;
 import util.UserSet;
 
@@ -82,6 +86,9 @@ public class SimpleDataSet implements DataSet {
 
 	@Override
 	public User removeUser(int userId) {
+		for(Rate rate : this.getAllRatesOfUser(userId)){
+			removeRate(rate.getUserId(), rate.getItemId());
+		}
 		return users.removeUser(userId);
 	}
 
@@ -97,6 +104,9 @@ public class SimpleDataSet implements DataSet {
 
 	@Override
 	public Item removeItem(int itemId) {
+		for(Rate rate : this.getAllRatesOfItem(itemId)){
+			removeRate(rate.getUserId(), rate.getItemId());
+		}
 		return items.removeItem(itemId);
 	}
 

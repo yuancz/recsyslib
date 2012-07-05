@@ -20,4 +20,20 @@ public interface DataSet extends UserSet, ItemSet, RateSet {
 	 * <code>addItem(Item item)</code> at first.
 	 */
 	public abstract boolean addRate(Rate rate);
+	
+	/**
+	 * Remove the user associated with the user id from this user set. 
+	 * All rates associated with the user also be removed. 
+	 * @return the removed user associated with the user id, 
+	 * or null if this data set contains no mapping for the user id
+	 */
+	public User removeUser(int userId);
+	
+	/**
+	 * Remove the item associated with the item id from this data set. 
+	 * All rates associated with the item also be removed. 
+	 * @return the removed item associated with the item id, 
+	 * or null if this item set contains no mapping for the item id
+	 */	
+	public Item removeItem(int itemId);
 }

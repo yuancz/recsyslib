@@ -1,5 +1,8 @@
 package util;
 
+import io.Inputer;
+import io.Outputer;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +29,43 @@ public final class ResultSet {
 	 */
 	public ResultSet(){
 		map = new HashMap<Integer, ResultList>();
+	}
+	
+	/**
+	 * Constructs an <tt>ResultSet</tt> from a specified file.
+	 */
+	public ResultSet(String filePath){
+		this();
+		Inputer in = new Inputer(filePath);
+		String line = in.readLine();
+		while(line != null){
+			String[] strs = line.split("\t");
+			int userId = Integer.valueOf(strs[0]);
+			int itemId = Integer.valueOf(strs[1]);
+			double rating = 1;
+			if(strs.length == 3)rating = Double.valueOf(strs[2]);
+			Rate rate = new Rate(userId, itemId, rating);
+			if(!map.containsKey(userId))map.put(userId, new ResultList(userId));
+			map.get(userId).addRate(rate);
+			line = in.readLine();
+		}
+		in.close();
+	}
+	
+	/**
+	 * Saves this <tt>ResultSet</tt> to a specified file.
+	 */
+	public void saveToFile(String filePath){
+		Outputer out = new Outputer(filePath);
+		for(int user : getUserIds()){
+			ResultList result = getResultList(user);
+			for(int i = 0;i<result.size();i++){
+				Rate rate = result.getRate(i);
+				out.writeLine(rate.getUserId()+"\t"+rate.getItemId()+"\t"+rate.getRating());
+			}
+			out.flush();
+		}
+		out.close();
 	}
 	
 	/**
