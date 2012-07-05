@@ -16,13 +16,6 @@ import predictor.Predictor;
  * @see PMF
  */
 public final class PMFPredictor extends AbstractPredictor implements Predictor {
-	
-	private double[][] u;//latent user feature matrix, D*U
-	private double[][] v;//latent item feature matrix, D*I
-	
-	private int D;//number of latent features
-	private int U;//number of users
-	private int I;//number of items
 
 	public PMFPredictor(DataSet dataSet) {
 		super(dataSet);
