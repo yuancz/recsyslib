@@ -1,4 +1,4 @@
-package evaluation;
+package core.evaluation;
 
 import util.Rate;
 import util.ResultList;
