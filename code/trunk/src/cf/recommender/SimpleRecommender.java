@@ -1,11 +1,8 @@
 package cf.recommender;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import cf.predictor.Predictor;
-import util.ItemSet;
 import util.Rate;
 import util.ResultList;
 
