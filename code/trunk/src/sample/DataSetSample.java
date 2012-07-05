@@ -1,7 +1,7 @@
 package sample;
 
-import util.*;
-import util.impl.*;
+import core.*;
+import core.impl.*;
 
 public class DataSetSample {
 
@@ -13,9 +13,9 @@ public class DataSetSample {
 		User u1= new SimpleUser(1);
 		Item i0 = new SimpleItem(0);
 		Item i1 = new SimpleItem(1);
-		SimpleRate r00 = new SimpleRate(u0.getUserId(),i0.getItemId(),1);
-		SimpleRate r01 = new SimpleRate(u0.getUserId(),i1.getItemId(),3);
-		SimpleRate r11 = new SimpleRate(u1.getUserId(),i1.getItemId(),5);		
+		Rate r00 = new Rate(u0.getUserId(),i0.getItemId(),1);
+		Rate r01 = new Rate(u0.getUserId(),i1.getItemId(),3);
+		Rate r11 = new Rate(u1.getUserId(),i1.getItemId(),5);		
 		DataSet dataset = new SimpleDataSet();
 		dataset.addUser(u0);
 		dataset.addUser(u1);

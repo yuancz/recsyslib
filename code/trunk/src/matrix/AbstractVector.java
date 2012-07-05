@@ -1,6 +1,6 @@
 package matrix;
 
-import util.RecSysLibException;
+import core.RecSysLibException;
 
 /**
  * This class provides a skeletal implementation of the <tt>Vector</tt> interface 
