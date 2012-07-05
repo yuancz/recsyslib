@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
-import core.util.RecSysLibException;
+import core.RecSysLibException;
 
 import io.CSVReader;
 import io.CSVWriter;

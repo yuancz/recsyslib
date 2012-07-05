@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-import core.util.RecSysLibException;
+import core.RecSysLibException;
 
 /**
  * This class provides a skeletal implementation of the <tt>BidiMap</tt> interface 

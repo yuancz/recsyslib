@@ -1,6 +1,6 @@
 package matrix;
 
-import util.RecSysLibException;
+import core.RecSysLibException;
 
 /**
  * This class provides some useful methods for vector operation.   
