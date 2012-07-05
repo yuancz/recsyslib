@@ -80,7 +80,7 @@ public final class CSVReader {
 	}
 
 	/**
-	 * Returns the row number of the cursor located currently, starting from zero. 
+	 * Returns the row number of the cursor located currently, starting from -1. 
 	 */			
 	public int getRow() {
 		return row;
