@@ -1,5 +1,8 @@
 package predictor.impl.pmf;
 
+import io.CSVWriter;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,7 @@ import matrix.Vectors;
 
 import core.DataSet;
 import core.Rate;
+import core.RecSysLibException;
 
 /**
  * The implementation of Probabilistic Matrix Factorization (PMF).
@@ -62,37 +66,43 @@ public class PMF {
 		}
 		ufTemp = new ArrayMatrix(numD,numU);
 		vfTemp = new ArrayMatrix(numD,numV);
+	}	
+	
+	public void save(String filePath){
+		String ufFile = "uf.txt";
+		String vfFile = "vf.txt";
+		File file = new File(filePath);
+		if(!file.isDirectory())
+			throw new RecSysLibException("The sepcified file path does not exist. ");
+		CSVWriter out;
+		//save uf
+		out = new CSVWriter(filePath+ufFile);
+		for(int i = 0;i<numU;i++){
+			out.writeElement(String.valueOf(uidList.get(i)));
+			for(int j = 0;j<numD;j++){
+				out.writeElement(String.valueOf(uf.getValue(j, i)));
+			}
+			out.newLine();
+		}
+		out.flush();
+		out.close();
+		//save vf
+		out = new CSVWriter(filePath+vfFile);
+		for(int i = 0;i<numV;i++){
+			out.writeElement(String.valueOf(iidList.get(i)));
+			for(int j = 0;j<numD;j++){
+				out.writeElement(String.valueOf(vf.getValue(j, i)));
+			}
+			out.newLine();
+		}
+		out.flush();
+		out.close();
 	}
 	
-	private double likelihood(Matrix uf, Matrix vf){
-		double squareDiff = 0;
-		for(int i = 0;i<uidList.size();i++){
-			int userId = uidList.get(i);
-			for(int j = 0;j<iidList.size();j++){
-				int itemId = iidList.get(j);
-				Rate rate = dataSet.getRate(userId, itemId);
-				if(rate != null){					
-					double rating = Vectors.dotMult(uf.getColumnVector(i), vf.getColumnVector(j));
-					squareDiff += (rate.getRating()-rating)*(rate.getRating()-rating);
-				}
-			}
+	public void estimating(){
+		while (update()){
+			System.out.println(likelihood());
 		}
-		double l2Norm = 0;
-		for(int i = 0;i<numD;i++){
-			for(int j = 0;j<numU;j++){
-				l2Norm += uf.getValue(i, j)*uf.getValue(i, j);
-			}
-		}
-		for(int i = 0;i<numD;i++){
-			for(int j = 0;j<numV;j++){
-				l2Norm += vf.getValue(i, j)*vf.getValue(i, j);
-			}
-		}
-		return -squareDiff-rs*l2Norm;		
-	}
-	
-	public double likelihood(){
-		return likelihood(uf, vf);
 	}
 	
 	public boolean update(){
@@ -133,6 +143,37 @@ public class PMF {
 		return !converged;
 	}
 	
+	public double likelihood(){
+		return likelihood(uf, vf);
+	}
+	
+	private double likelihood(Matrix uf, Matrix vf){
+		double squareDiff = 0;
+		for(int i = 0;i<uidList.size();i++){
+			int userId = uidList.get(i);
+			for(int j = 0;j<iidList.size();j++){
+				int itemId = iidList.get(j);
+				Rate rate = dataSet.getRate(userId, itemId);
+				if(rate != null){					
+					double rating = Vectors.dotMult(uf.getColumnVector(i), vf.getColumnVector(j));
+					squareDiff += (rate.getRating()-rating)*(rate.getRating()-rating);
+				}
+			}
+		}
+		double l2Norm = 0;
+		for(int i = 0;i<numD;i++){
+			for(int j = 0;j<numU;j++){
+				l2Norm += uf.getValue(i, j)*uf.getValue(i, j);
+			}
+		}
+		for(int i = 0;i<numD;i++){
+			for(int j = 0;j<numV;j++){
+				l2Norm += vf.getValue(i, j)*vf.getValue(i, j);
+			}
+		}
+		return -squareDiff-rs*l2Norm;		
+	}
+	
 	private void tryUpdate(double[][] upO, double[][] upD) {
 		double alpha = lr;
 		double beta = -rs;
@@ -163,18 +204,6 @@ public class PMF {
 				vf.setValue(i, j, vfTemp.getValue(i, j));
 			}
 		}			
-	}
-	
-	public void save(String filePath){
-		
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

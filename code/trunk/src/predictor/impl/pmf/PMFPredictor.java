@@ -16,12 +16,19 @@ import predictor.Predictor;
  * @see PMF
  */
 public final class PMFPredictor extends AbstractPredictor implements Predictor {
-
-	public PMFPredictor(DataSet dataSet) {
+	
+	/**
+	 * 
+	 * @param dataSet
+	 * @param filePath
+	 */
+	public PMFPredictor(DataSet dataSet, String filePath) {
 		super(dataSet);
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
 	@Override
 	public Rate getRate(int userId, int itemId) {
 		// TODO Auto-generated method stub
