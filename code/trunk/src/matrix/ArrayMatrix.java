@@ -24,7 +24,12 @@ public class ArrayMatrix extends AbstractMatrix implements Matrix {
 
 	@Override
 	protected void createInnerMatrix(int rowNum, int columnNum) {
-		arr = new double[rowNum][columnNum];		
+		arr = new double[rowNum][columnNum];
+		for(int i = 0;i<rowNum;i++){
+			for(int j = 0;j<columnNum;j++){
+				arr[i][j] = Matrix.ZERO;
+			}
+		}
 	}
 
 	@Override
