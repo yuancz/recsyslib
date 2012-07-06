@@ -50,6 +50,8 @@ public final class UserAverage extends AbstractPredictor implements Predictor {
 	 */
 	@Override
 	public Rate getRate(int userId, int itemId) {
+		checkUserId(userId);
+		checkItemId(itemId);
 		return new Rate(userId, itemId, avg.getValue(userId));
 	}
 	
