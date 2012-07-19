@@ -46,7 +46,15 @@ public class Stopwatch {
 	 * Returns the duration of this stopwatch in keep-time state in milliseconds. 
 	 */
 	public long getDuration(){
-		return duration;
+		switch(state){
+		case STOP:
+		case PAUSE:
+			return duration;
+		case KEEP_TIME:
+		default:
+			return System.currentTimeMillis() - start;	
+		}
+		
 	}
 	
 	/**
@@ -58,13 +66,17 @@ public class Stopwatch {
 	
 	/**
 	 * Starts keeping time, return true if the state before this operation is STOP or PAUSE. 
+	 * If the before state is STOP, the duration will be 0, 
+	 * else if PAUSE, the duration will continue to increase.  
 	 */
 	public boolean start(){
 		switch(state){
 		case STOP:
-		case PAUSE:
 			state = State.KEEP_TIME;
 			start = System.currentTimeMillis();
+			return true;
+		case PAUSE:
+			state = State.KEEP_TIME;
 			return true;
 		default:
 			return false;			
@@ -72,42 +84,35 @@ public class Stopwatch {
 	}
 	
 	/**
-	 * Stops keeping time.
-	 * Return the duration of this stopwatch until this operation in milliseconds. 
+	 * Stops keeping time, return true if the state before this operation is KEEP_TIME. 
 	 */
-	public long stop(){
+	public boolean stop(){
 		switch(state){
 		case KEEP_TIME:
 			state = State.STOP;
 			duration = System.currentTimeMillis() - start;
-			break;		
+			return true;
+		case STOP:
+		case PAUSE:
+		default:
+			return false;
 		}
-		return duration;
 	}
 	
 	/**
-	 * Pauses keeping time. 
-	 * Return the duration of this stopwatch until this operation in milliseconds. 
+	 * Pauses keeping time, return true if the state before this operation is KEEP_TIME. 
 	 */
-	public long pause(){
+	public boolean pause(){
 		switch(state){
 		case KEEP_TIME:
 			state = State.PAUSE;
-			duration += System.currentTimeMillis() - start;
-			break;		
+			duration = System.currentTimeMillis() - start;
+			return true;	
+		case STOP:
+		case PAUSE:
+		default:
+			return false;
 		}
-		return duration;
-	}
-	
-	/**
-	 * Resets this stopwatch, the duration will be zero and the state be STOP. 
-	 * Return the duration of this stopwatch until this operation in milliseconds. 
-	 */
-	public long reset(){
-		long oldDuration = duration;
-		duration = 0;
-		state = State.STOP;
-		return oldDuration;
 	}
 	
 }

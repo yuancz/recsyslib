@@ -104,16 +104,9 @@ public final class Matrics {
 		int row = m1.getRowNum();
 		int column = m2.getColumnNum();
 		Matrix result = new SparseMatrix(row, column);
-		int n = m1.getColumnNum();
 		for(int i = 0;i<row;i++){
 			for(int j = 0;j<column;j++){
-				Vector rv = m1.getRowVector(i);
-				Vector cv = m2.getColumnVector(j);
-				double value = 0;
-				for(int k = 0;k<n;k++){
-					value += rv.getValue(k)*cv.getValue(k);
-				}
-				result.setValue(i, j, value);
+				result.setValue(i, j, Vectors.dotMult(m1.getRowVector(i), m2.getColumnVector(j)));
 			}
 		}
 		return result;
